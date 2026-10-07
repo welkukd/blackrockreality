@@ -3,6 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
+
 interface GrindJob {
   id: string;
   status: string;
