@@ -12,7 +12,11 @@ CREATE TABLE workspaces (
   logo_url TEXT,
   custom_domain TEXT,
   primary_color TEXT DEFAULT '#2563EB',
-  subscription_plan TEXT DEFAULT 'free' CHECK (subscription_plan IN ('free', 'team', 'enterprise')),
+  subscription_plan TEXT DEFAULT 'free' CHECK (subscription_plan IN ('free', 'starter', 'pro', 'enterprise')),
+  subscription_interval TEXT CHECK (subscription_interval IN ('month', 'year')),
+  subscription_status TEXT DEFAULT 'inactive' CHECK (subscription_status IN ('inactive', 'active', 'past_due', 'canceled', 'trialing')),
+  stripe_customer_id TEXT,
+  stripe_subscription_id TEXT,
   data_residency TEXT DEFAULT 'us' CHECK (data_residency IN ('us', 'eu', 'apac')),
   gdpr_compliant BOOLEAN DEFAULT TRUE,
   ccpa_compliant BOOLEAN DEFAULT FALSE,
@@ -196,6 +200,41 @@ CREATE TABLE whatsapp_logs (
   error TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Payments (Stripe integration)
+CREATE TABLE payments (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id UUID REFERENCES workspaces(id) ON DELETE CASCADE,
+  stripe_customer_id TEXT,
+  stripe_subscription_id TEXT,
+  stripe_price_id TEXT,
+  stripe_invoice_id TEXT,
+  amount BIGINT NOT NULL, -- in cents
+  currency TEXT DEFAULT 'usd',
+  status TEXT CHECK (status IN ('paid', 'failed', 'pending', 'refunded')),
+  plan TEXT CHECK (plan IN ('starter', 'pro', 'enterprise')),
+  interval TEXT CHECK (interval IN ('month', 'year')),
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS on payments
+ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "View workspace payments" ON payments
+  FOR SELECT USING (
+    workspace_id IN (SELECT workspace_id FROM workspace_members WHERE user_id = auth.uid())
+  );
+
+CREATE POLICY "Manage workspace payments" ON payments
+  FOR ALL USING (
+    workspace_id IN (SELECT workspace_id FROM workspace_members WHERE user_id = auth.uid() AND role IN ('owner', 'admin'))
+  );
+
+-- Index for payments
+CREATE INDEX idx_payments_workspace ON payments(workspace_id);
+CREATE INDEX idx_payments_stripe_customer ON payments(stripe_customer_id);
+CREATE INDEX idx_payments_stripe_subscription ON payments(stripe_subscription_id);
 
 -- Content Pages (for SEO)
 CREATE TABLE content_pages (

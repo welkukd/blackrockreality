@@ -77,7 +77,7 @@ async function runGrindJob(
   keyData: any
 ) {
   try {
-    let allLeads: any[] = [];
+    const allLeads: any[] = [];
     const allErrors: Record<string, string> = {};
 
     for (const market of markets) {
