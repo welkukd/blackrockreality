@@ -145,7 +145,7 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     const { name, rate_limit, is_active, expires_in_days } = body;
 
-    const updates: any = {};
+    const updates: Record<string, unknown> = {};
     if (name !== undefined) updates.name = name;
     if (rate_limit !== undefined) updates.rate_limit = rate_limit;
     if (is_active !== undefined) updates.is_active = is_active;

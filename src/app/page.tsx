@@ -178,7 +178,7 @@ export default function HomePage() {
             Ready to Build Your Lead Empire?
           </h2>
           <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
-            Deploy in 10 minutes. Start grinding leads today. Scale to 50 markets when you're ready.
+            Deploy in 10 minutes. Start grinding leads today. Scale to 50 markets when you&apos;re ready.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link

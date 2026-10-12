@@ -55,7 +55,7 @@ function SignupPageContent() {
       } else if (data.session) {
         router.push(redirectTo);
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);

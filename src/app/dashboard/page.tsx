@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
 
@@ -40,17 +40,14 @@ export default function DashboardOverview() {
   const [recentLeads, setRecentLeads] = useState<RecentLead[]>([]);
   const [recentJobs, setRecentJobs] = useState<RecentJob[]>([]);
   const [loading, setLoading] = useState(true);
-  const [apiKey, setApiKey] = useState('');
-
-  useEffect(() => {
-    const storedKey = localStorage.getItem('brr_api_key');
-    if (storedKey) {
-      setApiKey(storedKey);
-      fetchData(storedKey);
+  const [apiKey, setApiKey] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('brr_api_key') || '';
     }
-  }, []);
+    return '';
+  });
 
-  const fetchData = async (key: string) => {
+  const fetchData = useCallback(async (key: string) => {
     try {
       const [leadsRes, jobsRes, keysRes] = await Promise.all([
         fetch('/api/leads?limit=5', { headers: { Authorization: `Bearer ${key}` } }),
@@ -66,7 +63,8 @@ export default function DashboardOverview() {
       if (jobsRes.ok) {
         const data = await jobsRes.json();
         setRecentJobs(data.jobs || []);
-        setStats(prev => ({ ...prev, activeGrindJobs: data.jobs?.filter((j: any) => j.status === 'running').length || 0 }));
+        const runningJobs = data.jobs?.filter((j: unknown) => (j as Record<string, unknown>).status === 'running') || [];
+        setStats(prev => ({ ...prev, activeGrindJobs: runningJobs.length }));
       }
       if (keysRes.ok) {
         const data = await keysRes.json();
@@ -77,7 +75,11 @@ export default function DashboardOverview() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiKey]);
+
+  useEffect(() => {
+    if (apiKey) fetchData(apiKey);
+  }, [apiKey, fetchData]);
 
   const handleKeySubmit = (e: React.FormEvent) => {
     e.preventDefault();

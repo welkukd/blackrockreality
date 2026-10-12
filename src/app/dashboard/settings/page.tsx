@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 
 
@@ -31,19 +31,17 @@ export default function SettingsPage() {
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('brr_api_key') || '';
+    }
+    return '';
+  });
   const [activeTab, setActiveTab] = useState<'workspace' | 'profile' | 'billing' | 'integrations'>('workspace');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  useEffect(() => {
-    const storedKey = localStorage.getItem('brr_api_key');
-    if (storedKey) {
-      setApiKey(storedKey);
-    }
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!apiKey) return;
 
     try {
@@ -65,11 +63,11 @@ export default function SettingsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiKey]);
 
   useEffect(() => {
-    if (apiKey) fetchData();
-  }, [apiKey]);
+    fetchData();
+  }, [fetchData]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,19 +104,11 @@ export default function SettingsPage() {
       } else {
         setMessage({ type: 'error', text: 'Failed to save settings' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Network error' });
     } finally {
       setSaving(false);
     }
-  };
-
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
   };
 
   if (!apiKey) {
@@ -183,7 +173,7 @@ export default function SettingsPage() {
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'workspace' | 'profile' | 'billing' | 'integrations')}
                 className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === tab.id
                     ? 'border-blue-600 text-blue-600'

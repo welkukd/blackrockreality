@@ -98,7 +98,7 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     const { status, assigned_to } = body;
 
-    const updates: any = {};
+    const updates: Record<string, unknown> = {};
     if (status) updates.status = status;
     if (assigned_to) updates.assigned_to = assigned_to;
 
@@ -121,7 +121,7 @@ export async function PATCH(request: NextRequest) {
   }
 }
 
-function leadsToCsv(leads: any[]): string {
+function leadsToCsv(leads: Array<Record<string, unknown> & { grade_factors?: string[] }>): string {
   const headers = [
     'ID', 'Source', 'Source ID', 'Market', 'Country', 'Name', 'Phone', 'Email',
     'WhatsApp', 'Website', 'Address', 'City', 'State', 'Category', 'Rating',

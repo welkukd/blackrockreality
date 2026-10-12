@@ -19,7 +19,7 @@ export interface ScrapedLead {
   has_ssl: boolean;
   tech_stack?: string[];
   load_time_ms?: number;
-  raw_data?: Record<string, any>;
+  raw_data?: Record<string, unknown>;
   market: string;
 }
 
@@ -151,13 +151,13 @@ export function gradeLead(lead: ScrapedLead): GradeResult {
     factors.push('slow_site');
   }
 
-  if (lead.raw_data?.timeline && config.timelineWeights[lead.raw_data.timeline]) {
-    score += config.timelineWeights[lead.raw_data.timeline];
+  if (lead.raw_data?.timeline && config.timelineWeights[lead.raw_data.timeline as keyof typeof config.timelineWeights]) {
+    score += config.timelineWeights[lead.raw_data.timeline as keyof typeof config.timelineWeights];
     factors.push(`urgent_${lead.raw_data.timeline}`);
   }
 
-  if (lead.source && config.sourceQuality[lead.source]) {
-    score += config.sourceQuality[lead.source];
+  if (lead.source && config.sourceQuality[lead.source as keyof typeof config.sourceQuality]) {
+    score += config.sourceQuality[lead.source as keyof typeof config.sourceQuality];
     factors.push(`quality_source_${lead.source}`);
   }
 

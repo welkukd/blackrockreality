@@ -3,13 +3,23 @@ import { supabase } from '@/lib/supabase';
 import { validateApiKey } from '@/lib/api-auth';
 import { runScrapersParallel } from '@/lib/scrapers/base';
 import { US_SCRAPERS, CA_SCRAPERS } from '@/lib/scrapers/north-america';
+import { UK_SCRAPERS, AE_SCRAPERS } from '@/lib/scrapers/europe-middle-east';
+import { AU_SCRAPERS, SG_SCRAPERS, IN_SCRAPERS, JP_SCRAPERS } from '@/lib/scrapers/asia-pacific';
 import { gradeLead } from '@/lib/grading';
+import type { ScrapedLead, ScraperConfig, BaseScraper } from '@/lib/scrapers/base';
+import type { ApiKeyData } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 
-const MARKET_SCRAPERS: Record<string, any[]> = {
+const MARKET_SCRAPERS: Record<string, (new (config: ScraperConfig) => BaseScraper)[]> = {
   US: US_SCRAPERS,
   CA: CA_SCRAPERS,
+  UK: UK_SCRAPERS,
+  AE: AE_SCRAPERS,
+  AU: AU_SCRAPERS,
+  SG: SG_SCRAPERS,
+  IN: IN_SCRAPERS,
+  JP: JP_SCRAPERS,
 };
 
 export async function POST(request: NextRequest) {
@@ -74,10 +84,10 @@ async function runGrindJob(
   categories: string[],
   cities: string[],
   maxLeadsPerSource: number,
-  keyData: any
+  keyData: ApiKeyData
 ) {
   try {
-    const allLeads: any[] = [];
+    const allLeads: ScrapedLead[] = [];
     const allErrors: Record<string, string> = {};
 
     for (const market of markets) {

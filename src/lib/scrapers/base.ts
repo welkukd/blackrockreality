@@ -28,7 +28,7 @@ export interface ScrapedLead {
   has_ssl: boolean;
   tech_stack?: string[];
   load_time_ms?: number;
-  raw_data?: Record<string, any>;
+  raw_data?: Record<string, unknown>;
   market: string;
 }
 

@@ -45,7 +45,12 @@ export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('brr_api_key') || '';
+    }
+    return '';
+  });
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
   const [filters, setFilters] = useState<LeadFilters>({
@@ -58,13 +63,6 @@ export default function LeadsPage() {
     key: 'created_at',
     direction: 'desc',
   });
-
-  useEffect(() => {
-    const storedKey = localStorage.getItem('brr_api_key');
-    if (storedKey) {
-      setApiKey(storedKey);
-    }
-  }, []);
 
   const fetchLeads = useCallback(async () => {
     if (!apiKey) return;
@@ -80,8 +78,10 @@ export default function LeadsPage() {
       if (filters.status) params.set('status', filters.status);
       if (filters.market) params.set('market', filters.market);
       if (filters.search) params.set('search', filters.search);
+      if (sortConfig.key) params.set('sort', sortConfig.key);
+      if (sortConfig.direction) params.set('direction', sortConfig.direction);
 
-      const res = await fetch(`/api/leads?${params}`, {
+      const res = await fetch(`/api/leads?${params.toString()}`, {
         headers: { Authorization: `Bearer ${apiKey}` },
       });
 
@@ -93,12 +93,12 @@ export default function LeadsPage() {
         localStorage.removeItem('brr_api_key');
         setApiKey('');
       }
-    } catch (error) {
-      console.error('Failed to fetch leads:', error);
+    } catch {
+      console.error('Failed to fetch leads:');
     } finally {
       setLoading(false);
     }
-  }, [apiKey, page, pageSize, filters]);
+  }, [apiKey, page, pageSize, filters, sortConfig]);
 
   useEffect(() => {
     fetchLeads();

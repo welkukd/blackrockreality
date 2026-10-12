@@ -1,4 +1,5 @@
 import * as CryptoJS from 'crypto-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export interface ApiKeyData {
   id: string;
@@ -29,7 +30,7 @@ export function getKeyPrefix(apiKey: string): string {
 
 export async function validateApiKey(
   apiKey: string,
-  supabase: any
+  supabase: SupabaseClient
 ): Promise<ApiKeyData | null> {
   const prefix = getKeyPrefix(apiKey);
   const keyHash = hashApiKey(apiKey);
@@ -51,7 +52,7 @@ export async function validateApiKey(
 
 export async function incrementApiKeyUsage(
   keyId: string,
-  supabase: any
+  supabase: SupabaseClient
 ): Promise<void> {
   await supabase.rpc('increment_api_key_usage', { key_id: keyId });
 }

@@ -18,20 +18,18 @@ interface ApiKey {
 export default function ApiKeysPage() {
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('brr_api_key') || '';
+    }
+    return '';
+  });
   const [creating, setCreating] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showNewKey, setShowNewKey] = useState<string | null>(null);
   const [form, setForm] = useState({ name: 'Default', rate_limit: 1000, expires_in_days: 365 });
   const [editingKey, setEditingKey] = useState<ApiKey | null>(null);
   const [editForm, setEditForm] = useState({ name: '', rate_limit: 1000, is_active: true, expires_in_days: 365 });
-
-  useEffect(() => {
-    const storedKey = localStorage.getItem('brr_api_key');
-    if (storedKey) {
-      setApiKey(storedKey);
-    }
-  }, []);
 
   const fetchKeys = useCallback(async () => {
     if (!apiKey) return;
@@ -48,8 +46,8 @@ export default function ApiKeysPage() {
         localStorage.removeItem('brr_api_key');
         setApiKey('');
       }
-    } catch (error) {
-      console.error('Failed to fetch API keys:', error);
+    } catch {
+      console.error('Failed to fetch API keys:');
     } finally {
       setLoading(false);
     }

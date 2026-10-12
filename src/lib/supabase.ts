@@ -1,8 +1,9 @@
 import { createBrowserClient } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-let _supabase: ReturnType<typeof createBrowserClient> | null = null;
+let _supabase: SupabaseClient | null = null;
 
-const createMockClient = () => ({
+const createMockClient = (): SupabaseClient => ({
   auth: {
     getUser: () => Promise.resolve({ data: { user: null }, error: { message: 'Supabase not configured' } }),
     getSession: () => Promise.resolve({ data: { session: null }, error: null }),
@@ -37,33 +38,32 @@ const createMockClient = () => ({
   },
   rpc: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }),
   storage: { from: () => ({ upload: () => ({}), download: () => ({}), remove: () => ({}), list: () => ({}), getPublicUrl: () => ({}) }) },
-});
+}) as unknown as SupabaseClient;
 
-export const supabase = new Proxy({} as ReturnType<typeof createBrowserClient>, {
+export const supabase = new Proxy({} as SupabaseClient, {
   get(_target, prop) {
     if (!_supabase) {
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
       if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('placeholder')) {
-        // Set mock client for build-time safety
-        _supabase = createMockClient() as any;
+        _supabase = createMockClient();
       } else {
         _supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
       }
     }
-    return (_supabase as any)[prop];
+    return _supabase[prop as keyof SupabaseClient];
   },
 });
 
 // Server-side client (for API routes)
-export function createServerClient() {
+export function createServerClient(): SupabaseClient {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('placeholder')) {
-    return supabase; // Return mock
+    return supabase;
   }
 
   return createBrowserClient(supabaseUrl, serviceRoleKey || supabaseAnonKey, {

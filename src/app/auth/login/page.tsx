@@ -30,7 +30,7 @@ function LoginPageContent() {
       } else if (data.session) {
         router.push(redirectTo);
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
@@ -44,7 +44,7 @@ function LoginPageContent() {
         provider,
         options: { redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectTo)}` }
       });
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
@@ -162,7 +162,7 @@ function LoginPageContent() {
           </p>
 
           <p className="mt-4 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href={`/auth/signup?redirect=${encodeURIComponent(redirectTo)}`} className="font-medium text-blue-600 hover:text-blue-500">
               Sign up
             </Link>

@@ -34,7 +34,12 @@ const AVAILABLE_CATEGORIES = ['residential', 'commercial', 'land', 'rental'];
 export default function GrindPage() {
   const [jobs, setJobs] = useState<GrindJob[]>([]);
   const [loading, setLoading] = useState(true);
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('brr_api_key') || '';
+    }
+    return '';
+  });
   const [creating, setCreating] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<NewJobForm>({
@@ -44,13 +49,6 @@ export default function GrindPage() {
     maxLeadsPerSource: 20,
   });
   const [formErrors, setFormErrors] = useState<string[]>([]);
-
-  useEffect(() => {
-    const storedKey = localStorage.getItem('brr_api_key');
-    if (storedKey) {
-      setApiKey(storedKey);
-    }
-  }, []);
 
   const fetchJobs = useCallback(async () => {
     if (!apiKey) return;
@@ -67,8 +65,8 @@ export default function GrindPage() {
         localStorage.removeItem('brr_api_key');
         setApiKey('');
       }
-    } catch (error) {
-      console.error('Failed to fetch grind jobs:', error);
+    } catch {
+      console.error('Failed to fetch grind jobs:');
     } finally {
       setLoading(false);
     }
