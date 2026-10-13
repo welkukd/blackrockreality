@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createServerClient } from '@/lib/supabase';
 import { validateApiKey } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
     }
 
     const apiKey = authHeader.slice(7);
+    const supabase = await createServerClient();
     const keyData = await validateApiKey(apiKey, supabase);
     if (!keyData) {
       return NextResponse.json({ error: 'Invalid or expired API key' }, { status: 401 });
@@ -83,6 +84,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const apiKey = authHeader.slice(7);
+    const supabase = await createServerClient();
     const keyData = await validateApiKey(apiKey, supabase);
     if (!keyData) {
       return NextResponse.json({ error: 'Invalid or expired API key' }, { status: 401 });

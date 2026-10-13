@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const apiKey = authHeader.slice(7);
     
     // Validate API key and get workspace
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: keyData, error: keyError } = await supabase
       .from('api_keys')
       .select('id, workspace_id, user_id')

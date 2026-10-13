@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
 import { createStripeClient, getPlanByPriceId, isSubscriptionActive } from '@/lib/stripe';
 import Stripe from 'stripe';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
 
     // Process the event
     switch (event.type) {
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function handleCheckoutCompleted(
-  supabase: ReturnType<typeof createServerClient>,
+  supabase: SupabaseClient,
   session: Stripe.Checkout.Session
 ) {
   const workspaceId = session.metadata?.workspace_id;
@@ -147,7 +148,7 @@ async function handleCheckoutCompleted(
 }
 
 async function handleSubscriptionChange(
-  supabase: ReturnType<typeof createServerClient>,
+  supabase: SupabaseClient,
   subscription: Stripe.Subscription
 ) {
   const workspaceId = subscription.metadata?.workspace_id;
@@ -195,7 +196,7 @@ async function handleSubscriptionChange(
 }
 
 async function handleInvoicePaymentSucceeded(
-  supabase: ReturnType<typeof createServerClient>,
+  supabase: SupabaseClient,
   invoice: Stripe.Invoice & { subscription?: string; customer?: string },
   stripe: Stripe
 ) {
@@ -230,7 +231,7 @@ async function handleInvoicePaymentSucceeded(
 }
 
 async function handleInvoicePaymentFailed(
-  supabase: ReturnType<typeof createServerClient>,
+  supabase: SupabaseClient,
   invoice: Stripe.Invoice & { subscription?: string; customer?: string; last_payment_error?: { message?: string } },
   stripe: Stripe
 ) {

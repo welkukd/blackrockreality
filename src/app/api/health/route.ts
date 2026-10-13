@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createServerClient } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
     // Test database connection
+    const supabase = await createServerClient();
     const { error } = await supabase.from('workspaces').select('id').limit(1);
-    
+
     if (error && !error.message.includes('Supabase not configured')) {
       return NextResponse.json(
         { status: 'unhealthy', database: 'disconnected', error: error.message },
