@@ -74,6 +74,7 @@ export default function GrindPage() {
 
   useEffect(() => {
     fetchJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchJobs]);
 
   const handleMarketChange = (market: string) => {

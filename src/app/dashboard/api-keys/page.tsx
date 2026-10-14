@@ -55,6 +55,7 @@ export default function ApiKeysPage() {
 
   useEffect(() => {
     fetchKeys();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchKeys]);
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -329,7 +330,7 @@ export default function ApiKeysPage() {
                 onClick={() => setShowNewKey(null)}
                 className="w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
               >
-                I've Saved It
+                I&apos;ve Saved It
               </button>
             </div>
           </div>

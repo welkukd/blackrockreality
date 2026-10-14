@@ -102,6 +102,7 @@ export default function LeadsPage() {
 
   useEffect(() => {
     fetchLeads();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchLeads]);
 
   const handleSort = (key: string) => {
