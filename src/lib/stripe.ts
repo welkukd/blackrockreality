@@ -21,6 +21,12 @@ export interface PlanConfig {
 }
 
 // Plan configurations - prices in USD cents
+// Price IDs loaded from environment variables (set in Vercel dashboard)
+function getEnvPriceId(plan: SubscriptionPlan, interval: 'monthly' | 'yearly'): string | undefined {
+  const envVar = `STRIPE_PRICE_ID_${plan.toUpperCase()}_${interval.toUpperCase()}`;
+  return process.env[envVar];
+}
+
 export const PLANS: Record<SubscriptionPlan, PlanConfig> = {
   starter: {
     name: 'Starter',
@@ -43,6 +49,8 @@ export const PLANS: Record<SubscriptionPlan, PlanConfig> = {
     whitelabelDashboard: false,
     advancedAnalytics: false,
     customIntegrations: false,
+    stripePriceIdMonthly: getEnvPriceId('starter', 'monthly'),
+    stripePriceIdYearly: getEnvPriceId('starter', 'yearly'),
   },
   pro: {
     name: 'Pro',
@@ -67,6 +75,8 @@ export const PLANS: Record<SubscriptionPlan, PlanConfig> = {
     whitelabelDashboard: true,
     advancedAnalytics: true,
     customIntegrations: false,
+    stripePriceIdMonthly: getEnvPriceId('pro', 'monthly'),
+    stripePriceIdYearly: getEnvPriceId('pro', 'yearly'),
   },
   enterprise: {
     name: 'Enterprise',
@@ -93,6 +103,8 @@ export const PLANS: Record<SubscriptionPlan, PlanConfig> = {
     whitelabelDashboard: true,
     advancedAnalytics: true,
     customIntegrations: true,
+    stripePriceIdMonthly: getEnvPriceId('enterprise', 'monthly'),
+    stripePriceIdYearly: getEnvPriceId('enterprise', 'yearly'),
   },
 };
 

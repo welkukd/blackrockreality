@@ -21,8 +21,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Agreement to Terms</h2>
             <p className="text-gray-700 leading-relaxed">
-              By accessing and using BlackRockReality ("the Service", "we", "our", "us"), you agree to be bound
-              by these Terms of Service ("Terms"). If you do not agree, you may not use the Service.
+              By accessing and using BlackRockReality (&ldquo;the Service&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;), you agree to be bound
+              by these Terms of Service (&ldquo;Terms&rdquo;). If you do not agree, you may not use the Service.
             </p>
           </section>
 
@@ -97,7 +97,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-3">8. Disclaimers</h2>
             <p className="text-gray-700 leading-relaxed">
-              The Service is provided "as is" and "as available" without warranties of any kind.
+              The Service is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without warranties of any kind.
               We do not guarantee lead accuracy, completeness, or conversion rates.
               Lead data is sourced from public portals and may contain errors or outdated information.
             </p>
@@ -145,7 +145,7 @@ export default function TermsPage() {
             <p className="text-gray-700 leading-relaxed">
               We may update these Terms from time to time. We will notify you of material changes
               by email or through the Service. Continued use after changes constitutes acceptance.
-              The "Last updated" date at the top indicates when the latest changes were made.
+              The &ldquo;Last updated&rdquo; date at the top indicates when the latest changes were made.
             </p>
           </section>
 

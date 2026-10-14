@@ -21,8 +21,8 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Introduction</h2>
             <p className="text-gray-700 leading-relaxed">
-              BlackRockReality ("we", "our", "us") operates a global real estate lead generation platform
-              (the "Service"). This Privacy Policy explains how we collect, use, disclose, and safeguard
+              BlackRockReality (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;) operates a global real estate lead generation platform
+              (the &ldquo;Service&rdquo;). This Privacy Policy explains how we collect, use, disclose, and safeguard
               your information when you use our Service.
             </p>
           </section>
@@ -129,7 +129,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-3">10. Changes to This Policy</h2>
             <p className="text-gray-700">
               We may update this Privacy Policy from time to time. We will notify you of any material
-              changes by email or through the Service. The "Last updated" date at the top indicates
+              changes by email or through the Service. The &ldquo;Last updated&rdquo; date at the top indicates
               when the latest changes were made.
             </p>
           </section>
