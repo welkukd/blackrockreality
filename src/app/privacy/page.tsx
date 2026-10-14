@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | BlackRockReality',
@@ -117,7 +118,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-3">9. Children's Privacy</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-3">9. Children&apos;s Privacy</h2>
             <p className="text-gray-700">
               Our Service is not directed to individuals under 18. We do not knowingly collect personal
               information from children. If you believe we have collected such information, please contact us.
@@ -146,7 +147,7 @@ export default function PrivacyPage() {
         </div>
 
         <div className="mt-8 text-center text-sm text-gray-500">
-          <a href="/" className="text-blue-600 hover:underline">← Back to Home</a>
+          <Link href="/" className="text-blue-600 hover:underline">&larr; Back to Home</Link>
         </div>
       </div>
     </div>

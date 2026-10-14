@@ -138,7 +138,7 @@ export default function DocsPage() {
                   <tr><td className="py-2 font-mono">offset</td><td className="py-2">number</td><td className="py-2 text-gray-600">Pagination offset</td></tr>
                   <tr><td className="py-2 font-mono">sort</td><td className="py-2">string</td><td className="py-2 text-gray-600">Sort field (created_at, grade_score, etc.)</td></tr>
                   <tr><td className="py-2 font-mono">direction</td><td className="py-2">string</td><td className="py-2 text-gray-600">asc or desc</td></tr>
-                  <tr><td className="py-2 font-mono">export</td><td className="py-2">string</td><td className="py-2 text-gray-600">Set to "csv" for CSV export</td></tr>
+                  <tr><td className="py-2 font-mono">export</td><td className="py-2">string</td><td className="py-2 text-gray-600">Set to csv for CSV export</td></tr>
                 </tbody>
               </table>
 

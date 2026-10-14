@@ -73,8 +73,8 @@ export default function GrindPage() {
   }, [apiKey]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchJobs]);
 
   const handleMarketChange = (market: string) => {

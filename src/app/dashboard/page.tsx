@@ -78,6 +78,7 @@ export default function DashboardOverview() {
   }, [apiKey]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (apiKey) fetchData(apiKey);
   }, [apiKey, fetchData]);
 
@@ -158,7 +159,7 @@ export default function DashboardOverview() {
             </div>
           </form>
           <p className="mt-6 text-sm text-gray-500">
-            Don't have an API key? <Link href="/dashboard/api-keys" className="text-blue-600 hover:underline">Create one</Link>
+            Don&apos;t have an API key? <Link href="/dashboard/api-keys" className="text-blue-600 hover:underline">Create one</Link>
           </p>
         </div>
       </div>

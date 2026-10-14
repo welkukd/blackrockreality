@@ -66,8 +66,8 @@ export default function SettingsPage() {
   }, [apiKey]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchData]);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -400,7 +400,7 @@ export default function SettingsPage() {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                 <h3 className="font-semibold text-blue-900 mb-2">Current Plan: Free</h3>
                 <p className="text-blue-800">
-                  You're on the Free plan. Upgrade to Team or Enterprise for higher rate limits,
+                  You&apos;re on the Free plan. Upgrade to Team or Enterprise for higher rate limits,
                   more API keys, and priority support.
                 </p>
                 <button className="mt-4 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm">
